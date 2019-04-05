@@ -23,5 +23,24 @@
         </p>
         <p ps-if="showSentence">I only show if you check the checkbox above</p>
     </div>
+
+    <!-- A second app -->
+    <h2>Another app on the same page</h2>
+    <div id="app-root-2">
+        <p>
+            <input ps-bind="text" ps-bind-attribute="value" ps-bind-event="input">
+            <button ps-bind="text"></button>
+        </p>
+        <p>
+            Show sentence:
+            <input type="checkbox" 
+                ps-bind="showSentence" 
+                ps-bind-attribute="checked" 
+                ps-bind-event="input">
+        </p>
+        <p ps-if="showSentence">I only show if you check the checkbox above</p>
+        <button disabled ps-if="showSentence">Abcdefg</button>
+    </div>
+
 </body>
 </html>
