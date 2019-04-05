@@ -46,6 +46,17 @@ export default function Controller (rootElement, model) {
     
     /* Initialisation */
 
+    // Check if this app is nested and only continue if not
+    var node = this.rootElement.parentNode
+    while (['HEAD', 'BODY', 'HTML'].indexOf(node.tagName) < 0) {
+        console.log(node)
+        if (node.hasAttribute('ps-app-root')) {
+            throw new SyntaxError('App nesting is not allowed')
+        }
+        node = node.parentNode
+    }
+    this.rootElement.setAttribute('ps-app-root', true)
+
     // Create bindings between model and elements
     for (var i = 0; i < this.boundElements.length; i++) {
         var element = this.boundElements[i],
