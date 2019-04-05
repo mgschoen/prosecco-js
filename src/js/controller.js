@@ -1,4 +1,4 @@
-import Binding from './binding'
+import Binding from './binding/'
 import Constants from './constants'
 import IfWatcher from './if-watcher'
 
@@ -36,9 +36,11 @@ export default function Controller (rootElement, model) {
     this.watch = function (property, watcher) {
         try {
             var binding = _this._getBindingFor(property)
-            if (binding) {
-                binding.watch(watcher)
+            if (!binding) {
+                binding = new Binding(_this.model, property)
+                _this.bindings.push(binding)
             }
+            binding.watch(watcher)
         } catch (error) {
             console.error(error)
         }
