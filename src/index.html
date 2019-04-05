@@ -10,8 +10,18 @@
     <!-- A simple app with data binding -->
     <h2>A simple app with data binding</h2>
     <div id="app-root">
-        <input ps-bind="text" ps-bind-attribute="value" ps-bind-event="input">
-        <button ps-bind="text"></button>
+        <p>
+            <input ps-bind="text" ps-bind-attribute="value" ps-bind-event="input">
+            <button ps-bind="text"></button>
+        </p>
+        <p>
+            Show sentence:
+            <input type="checkbox" 
+                ps-bind="showSentence" 
+                ps-bind-attribute="checked" 
+                ps-bind-event="input">
+        </p>
+        <p ps-if="showSentence">I only show if you check the checkbox above</p>
     </div>
 </body>
 </html>
