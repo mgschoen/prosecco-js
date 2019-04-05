@@ -1,4 +1,4 @@
-export default function Binding (model, property) {
+export default function AtomicBinding (model, property) {
 
     /* Properties */
     var _this = this
