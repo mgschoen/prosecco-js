@@ -1,6 +1,6 @@
 {
   "name": "prosecco-js",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "src/index.js",
   "author": "Martin Schoen <schoenm@cip.ifi.lmu.de>",
   "license": "MIT",
