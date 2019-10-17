@@ -1,6 +1,7 @@
 import Binding from './binding/'
 import Constants from './constants'
-import IfWatcher from './if-watcher'
+import IfWatcher from './watchers/if-watcher'
+import EachWatcher from './watchers/each-watcher'
 
 var attr = Constants.attributeNames
 
@@ -12,6 +13,7 @@ export default function Controller (rootElement, model) {
     this.model = model
     this.boundElements = rootElement.querySelectorAll('*[' + attr.bind + ']')
     this.conditionalElements = rootElement.querySelectorAll('*[' + attr.if + ']')
+    this.iteratedElements = rootElement.querySelectorAll('*[' + attr.each + ']')
     this.bindings = []
 
     /* Methods */
@@ -81,5 +83,20 @@ export default function Controller (rootElement, model) {
         var conditionalProperty = element.getAttribute(attr.if)
         this.watch(conditionalProperty, IfWatcher(element))
         IfWatcher(element)(null, this.model[conditionalProperty])
+    }
+
+    // Add each watchers
+    for (var k = 0; k < this.iteratedElements.length; k++) {
+        var element = this.iteratedElements[k]
+        var parent = element.parentNode
+        var eachContainer = document.createElement('div')
+        var iterationProperty = element.getAttribute(attr.each)
+        // creating a container node for iterating in
+        eachContainer.setAttribute('ps-each-container', true)
+        parent.insertBefore(eachContainer, element)
+        parent.removeChild(element)
+        // passing the container and the element to be cloned in it to the watcher
+        this.watch(iterationProperty, EachWatcher(eachContainer, element))
+        EachWatcher(eachContainer, element)(null, this.model[iterationProperty])
     }
 }

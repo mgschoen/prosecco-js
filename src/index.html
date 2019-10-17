@@ -10,18 +10,30 @@
     <!-- A simple app with data binding -->
     <h2>A simple app with data binding</h2>
     <div id="app-root">
+        <h4>Binding atomic values, one-way and two-way</h4>
+        Try <code>document.app.model.text = 'wurstbrot'</code>
         <p>
             <input ps-bind="text" ps-bind-attribute="value" ps-bind-event="input">
             <button ps-bind="text"></button>
         </p>
+
+        <h4>Conditional elements, rendered if a value is not falsy</h4>
         <p>
             Show sentence:
             <input type="checkbox" 
                 ps-bind="showSentence" 
-                ps-bind-attribute="checked" 
+                ps-bind-attribute="checked"
                 ps-bind-event="input">
         </p>
         <p ps-if="showSentence">I only show if you check the checkbox above</p>
+
+        <h4>Iterating over arrays - the simple way and the complex way</h4>
+        <button ps-each="testArray"></button>
+        <ul>
+            <li ps-each="anotherTestArray">
+                My value is <input disabled="true" ps-each-value-target="value">
+            </li>
+        </ul>
     </div>
 
     <!-- A second app -->
