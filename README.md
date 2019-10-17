@@ -63,7 +63,7 @@ Let's bind some elements to our text message:
     <input ps-bind="text" 
         ps-bind-attribute="value" 
         ps-bind-event="input">
-    <p ps-bind="value"></p>
+    <p ps-bind="text"></p>
 </div>
 ...
 ```
