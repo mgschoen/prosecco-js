@@ -9,6 +9,16 @@ Prosecco JS is a library that provides super light (and super fizzy 🥂) data b
 
 That said, it's the perfect choice if you want that and _only_ that. So let's see if this is for you!
 
+## Content
+
+- [Setup](#setup)
+- [Documentation](#documentation)
+  - [Prosecco's constructor](#proseccos-constructor)
+  - [Binding to primitive values: `ps-bind`](#binding-to-primitive-values-ps-bind)
+  - [Conditional rules: `ps-if`](#conditional-rules-ps-if)
+  - [Iterating over arrays: `ps-each`](#iterating-over-arrays-ps-each)
+  - [Watching value changes: `Prosecco.watch()`](#watching-value-changes-proseccowatch)
+
 ## Setup
 
 As of now, Prosecco JS is only available as Webpack module. Install it with
@@ -57,7 +67,7 @@ var app = new Prosecco(appRoot, {
 
 And your app is ready!
 
-Wait. What is that object in our `Prosecco()` constructor? That is our data model. We can bind DOM elements to the properties in there.
+The object with the `text` property is our data model. We can bind DOM elements to the properties in there.
 
 Let's bind some elements to our `text` property:
 
@@ -81,28 +91,136 @@ I'll cover the details of all those `ps-` attributes later. For the moment, let'
 
 ### Prosecco's constructor
 
-- rootElement
-- model
-- multiple apps on the same page
-  - nesting not allowed
+When you import Prosecco in your JavaScript, what you get is Prosecco's constructor function.
 
-### Binding to primitive values
+```js
+import Prosecco from 'prosecco-js';
 
-- ps-bind
-- ps-bind-attribute
-- ps-bind-event
+// ...
 
-### Conditional rules (ps-if)
+var app = new Prosecco(rootElement, model)
+```
+
+To instantiate your Prosecco app, you pass a DOM element and an object that will act as your app's data model.
+
+The `rootElement` can be any [`Element`](https://developer.mozilla.org/en-US/docs/Web/API/element) in the DOM. It defines the scope of your app: Your app will only manipulate children of that root element and be deaf to anything that happens outside its scope.
+
+The `model` can be any [`Object`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) you like. The object's properties represent your app's data model. Note that it does not make much sense to nest other objects inside your model. The only data types you can bind to are [Primitives such as Strings, Numbers and Booleans](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) and Arrays. But as long as you don't attempt to bind to one, you can have as many objects as you like in your model.
+
+#### Multiple apps on one page
+
+You can instantiate multiple Prosecco apps in the same document. For each app, call the constructor with a different `rootElement`. 
+
+There is just one restriction: You may not nest apps in the DOM. If you try to pass an element to the constructor that is part of another app's scope, Prosecco will fail.
+
+Here is a working example:
+
+```html
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>...</head>
+<body>
+    <div id="app-root-one">
+        ...
+    </div>
+    <div id="app-root-two">
+        ...
+    </div>
+    <script src="index.js">
+</body>
+</html>
+```
+
+```js
+// index.js
+import Prosecco from 'prosecco-js';
+
+var rootOne = document.getElementById('app-root-one');
+var rootTwo = document.getElementById('app-root-two');
+
+var appOne = new Prosecco(rootOne, {
+    // model of app one
+});
+var appTwo = new Prosecco(rootTwo, {
+    // model of app two
+});
+```
+
+### Binding to primitive values: `ps-bind`
+
+To _bind_ an element to a variable means to create a direct connection between them: Whenever the value of the variable changes, this change will be reflected in the element.
+
+In Prosecco JS you create this connection with the `ps-bind` attribute.
+
+```html
+<p ps-bind="greeting"></p>
+```
+
+The paragraph above is _bound_ to the value of the variable `greeting`.
+
+In Prosecco, you can only bind to variables that you have defined in your model. So let's assume you have instantiated your app with the following model.
+
+```js
+var app = new Prosecco(rootElement, {
+    greeting: 'Cheers, world!'
+}); 
+```
+
+The paragraph that is bound to `greeting` will then render as
+
+![](http://argonn.me/share/prosecco-demo-2.png)
+
+If you want to bind to a specific attribute instead of the content of an element, use `ps-bind-attribute`.
+
+```html
+<input type="text" ps-bind="greeting" ps-bind-attribute="value">
+```
+
+In this input field, the value of the variable `greeting` will be bound to the input's `value` attribute. So, with our model from above, this would render as:
+
+```html
+<input type="text" value="Cheers, world!">
+```
+
+![](http://argonn.me/share/prosecco-demo-3.png)
+
+You can bind as many elements as you like to a single variable. But you can only bind one variable to an element.
+
+#### Modifying bound variables
+
+You can modify all variables in your model directly in your JavaScript.
+
+```js
+app.model.greeting = 'À votre santé, world!';
+```
+
+Executing the line above will update both your model and all elements that are bound to it.
+
+It also works the other way round: If you want the changes you make in the DOM to be reflected in your model, specify a `ps-bind-event`. Each time the specified event occurs on the bound element, Prosecco will update its corresponding value in the model.
+
+```html
+<input type="text"
+    ps-bind="greeting"
+    ps-bind-attribute="value"
+    ps-bind-event="input">
+```
+
+In this input field, whenever the `input` event occurs - that is, changing the value by typing, cutting, pasting, etc. - the new value ist stored in the model. Try it by typing and looking up the value for `app.model.greeting` - it will always be the same value as you see in the input field.
+
+Note that you can bind to any event. Should you fancy updating the model only when the user hovers the input field with her mouse, feel free to specify `ps-bind-event="mouseover"`.
+
+### Conditional rules: `ps-if`
 
 - ps-if
 
-### Iterating over arrays
+### Iterating over arrays: `ps-each`
 
 - ps-each
 - ps-each-value-target
   - same element
   - some child (but only one!)
 
-### Watching value changes
+### Watching value changes: `Prosecco.watch()`
 
 - Prosecco.watch()
