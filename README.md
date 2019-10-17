@@ -51,8 +51,6 @@ Somwhere in your HTML, define a root for your Prosecco app.
 </html>
 ```
 
-If you wish, define multiple roots for multiple apps on the same page. But don't nest them – that is forbidden.
-
 Lastly, initalise your app in your JavaScript.
 
 ```js
@@ -67,7 +65,7 @@ var app = new Prosecco(appRoot, {
 
 And your app is ready!
 
-The object with the `text` property is our data model. We can bind DOM elements to the properties in there.
+The object with the `text` property is your app's data model. You can bind DOM elements to the properties in there.
 
 Let's bind some elements to our `text` property:
 
@@ -184,6 +182,8 @@ In this input field, the value of the variable `greeting` will be bound to the i
 ```
 
 ![](http://argonn.me/share/prosecco-demo-3.png)
+
+If you don't specify a `ps-bind-attribute`, Prosecco will default to binding to the element's `textContent`.
 
 You can bind as many elements as you like to a single variable. But you can only bind one variable to an element.
 
