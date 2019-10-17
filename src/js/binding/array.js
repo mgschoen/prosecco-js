@@ -1,4 +1,4 @@
-export default function ObjectBinding (model, property) {
+export default function ArrayBinding (model, property) {
     
     /* Properties */
     var _this = this
@@ -9,10 +9,11 @@ export default function ObjectBinding (model, property) {
     this.watchers = []
 
     /* Functions */
-    this.getter = function (target, property) {
+    // Getter and setter for the object's individual propertiers
+    this.individualGetter = function (target, property) {
         return target[property]
     }
-    this.setter = function (target, property, value) {
+    this.individualSetter = function (target, property, value) {
         // Update model value
         var oldObject = Array.isArray(target) ? [] : {}
         Object.assign(oldObject, target)
@@ -21,6 +22,20 @@ export default function ObjectBinding (model, property) {
         for (var j = 0; j < _this.watchers.length; j++) {
             _this.watchers[j](oldObject, target)
         }
+        return true
+    }
+    // Getter and setter for access to the property in the model itself
+    this.getter = function () {
+        return _this.proxyObject
+    }
+    this.setter = function (newArray) {
+        if (!Array.isArray(newArray)) {
+            throw new Error('Cannot assign non-Array value to Array property')
+        }
+        // Prevent the proxy getting replaced by an assignment.
+        // Substitute all its values instead
+        _this.proxyObject.length = 0
+        _this.proxyObject.push.apply(_this.proxyObject, newArray)
         return true
     }
     this.bind = function (element, attribute, event) {
@@ -36,8 +51,12 @@ export default function ObjectBinding (model, property) {
 
     // Initialisation
     this.proxyObject = new Proxy(this.originalObject, {
-        get: _this.getter,
-        set: _this.setter
+        get: _this.individualGetter,
+        set: _this.individualSetter
     })
     this.model[this.property] = this.proxyObject
+    Object.defineProperty(this.model, this.property, {
+        get: this.getter,
+        set: this.setter
+    })
 }
