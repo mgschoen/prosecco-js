@@ -49,7 +49,7 @@ For development purposes, include the following script in the `<head>` of your H
 For production releases, use the minified version:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/prosecco-js@v0.1.2/dist/prosecco.js">
+<script src="https://cdn.jsdelivr.net/npm/prosecco-js@v0.1.2/dist/prosecco.min.js">
 ```
 
 ## Quickstart
