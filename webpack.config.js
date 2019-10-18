@@ -2,10 +2,10 @@ const path = require('path')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = [{
-    mode: 'production',
-    entry: './src/index.js',
+    mode: 'development',
+    entry: './src/index-static.js',
     output: {
-        filename: 'bundle.js',
+        filename: 'prosecco.js',
         path: path.resolve(__dirname, 'dist')
     },
 
@@ -20,9 +20,9 @@ module.exports = [{
     ]
 },{
     mode: 'production',
-    entry: './src/index-inline.js',
+    entry: './src/index-static.js',
     output: {
-        filename: 'bundle-inline.js',
+        filename: 'prosecco.min.js',
         path: path.resolve(__dirname, 'dist')
     },
 
