@@ -212,15 +212,155 @@ Note that you can bind to any event. Should you fancy updating the model only wh
 
 ### Conditional rules: `ps-if`
 
-- ps-if
+You can hide and show elements depending on the value of a variable.
+
+```html
+<p ps-if="error">
+    <strong>Oh no!</strong> There was an error.
+</p>
+```
+
+Whenever `error` is [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), the paragraph above and all its children are displayed. When `error` ist [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy), they are all hidden.
 
 ### Iterating over arrays: `ps-each`
 
-- ps-each
-- ps-each-value-target
-  - same element
-  - some child (but only one!)
+At times you might need to manage a list of similar elements, for example in a shopping list. That's what `ps-each` is for.
+
+```html
+<h3>Drinks to buy</h3>
+<ul>
+    <li ps-each="drinks"></li>
+</ul>
+```
+
+Suppose your model looks like this:
+
+```js
+{
+    drinks: [ 'Prosecco', 'Bellini', 'Spritz' ]
+}
+```
+
+Then the template above would render as
+
+```html
+<h3>Drinks to buy</h3>
+<ul>
+    <li>Prosecco</li>
+    <li>Bellini</li>
+    <li>Spritz</li>
+</ul>
+```
+
+Whenever you manipulate the array in your code, Prosecco updates the `ps-each` loop in the template - even if you completely reassign it with a new array.
+
+You can not only repeat individual elements, but also subtrees of the document:
+
+```html
+<div class="card" ps-each="imageUrls">
+    <div class="image-wrapper">
+        <img ps-each-value-target="src" alt="">
+    </div>
+</div>
+```
+
+The `ps-each-value-target` attribute defines
+
+* which child element gets bound to the array values
+* and which attribute of that child the value is bound to
+
+So the example above would render as
+
+```html
+<div class="card">
+    <div class="image-wrapper">
+        <img src="path/to/image1.jpg" alt="">
+    </div>
+</div>
+<div class="card">
+    <div class="image-wrapper">
+        <img src="path/to/image2.jpg" alt="">
+    </div>
+</div>
+<!-- ... -->
+```
+
+Note that _inside_ your array you can have all types of values that can be converted to a string. While it wouldn't make much sense to have objects inside your array (`{ a: 1, b: 2 }` converts to `"[object Object]"`), nesting other arrays in your array can work perfectly:
+
+```js
+{
+    drinks: [ ['Prosecco', 'Frizzante'], ['Aperol', 'Spritz'] ]
+}
+```
+
+would render as
+
+```html
+<h3>Drinks to buy</h3>
+<ul>
+    <li>Prosecco,Frizzante</li>
+    <li>Aperol,Spritz</li>
+</ul>
+```
+
+Note, too, that if you're feeling lucky you are free to override your value's `toString()` method. So if you really need to have objects in your array, you could do something like this:
+
+```js
+// .js
+var stringifyableObject = { 
+    a: 'my string representation', 
+    b: 'some business logic'
+};
+stringifyableObject.toString = function () {
+    return this.a
+};
+
+var app = new Prosecco(document.getElementById('app-root'), {
+    list: [ stringifyableObject ]
+});
+```
+
+```html
+<!-- .html -->
+<ul>
+    <li ps-bind="list"></li>
+</ul>
+```
+
+Looping over the `list` variable would then render as:
+
+```html
+<ul>
+    <li>my string representation</li>
+</ul>
+```
 
 ### Watching value changes: `Prosecco.watch()`
 
-- Prosecco.watch()
+You can execute your own code whenever a variable value changes, for example to make API calls whenever the user types in an input field. That's what watcher functions are for.
+
+To add a watcher to a variable, simply call the `watch()` function on your Prosecco instance and pass it the variable name and the function you want to execute each time the value changes.
+
+```js
+var app = new Prosecco(appRoot, {
+    query: ''
+});
+
+app.watch('query', function (oldValue, newValue) {
+    // do something
+});
+```
+
+The function you pass to `.watch()` is called _watcher_. It always has the same signature, with the variable's previous value as its first argument and the new value as its second argument.
+
+You are free to execute arbitrary code in a watcher. Be aware, however, that watchers tend to fire more often than you think. Try for example watching an array variable, reassign a whole new array to it and see what happens...
+
+```js
+var app = new Prosecco(appRoot, {
+    list: [ 1, 2, 3 ]
+});
+
+app.watch('list', function (oldValue, newValue) {
+    alert('list changed from "' + oldValue + '" to "' + newValue + '")';
+});
+```
