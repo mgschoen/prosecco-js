@@ -24,7 +24,7 @@ That said, it's the perfect choice if you want that and _only_ that. So let's se
 
 ### As webpack module
 
-Install Prosecco via npm
+Install the latest version via npm
 
 ```bash
 $ npm install prosecco-js
@@ -43,13 +43,13 @@ import Prosecco from 'prosecco-js';
 For development purposes, include the following script in the `<head>` of your HTML:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mgschoen/prosecco-js@latest/dist/prosecco.js">
+<script src="https://cdn.jsdelivr.net/npm/prosecco-js@v0.1.2/dist/prosecco.js">
 ```
 
 For production releases, use the minified version:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mgschoen/prosecco-js@latest/dist/prosecco.min.js">
+<script src="https://cdn.jsdelivr.net/npm/prosecco-js@v0.1.2/dist/prosecco.js">
 ```
 
 ## Quickstart
