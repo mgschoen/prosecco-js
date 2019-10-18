@@ -3,15 +3,22 @@
   "version": "0.1.1",
   "main": "src/index.js",
   "description": "Super light and fizzy data binding",
-  "author": "Martin Schoen <schoenm@cip.ifi.lmu.de>",
-  "license": "MIT",
+  "keywords": [
+    "javascript", 
+    "data-binding", 
+    "framework", 
+    "dom", 
+    "dom-manipulation", 
+    "prosecco"
+  ],
+  "author": "Martin Schoen <martingeorg.schoen@gmail.com>",
+  "license": "ISC",
   "scripts": {
     "start": "webpack-dev-server --open --host 0.0.0.0",
     "build": "node_modules/.bin/webpack"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^2.0.1",
-    "html-webpack-plugin": "^3.2.0",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1"

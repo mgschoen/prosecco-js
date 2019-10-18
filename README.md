@@ -11,7 +11,8 @@ That said, it's the perfect choice if you want that and _only_ that. So let's se
 
 ## Content
 
-- [Setup](#setup)
+- [Install Prosecco](#install-prosecco)
+- [Quickstart](#quickstart)
 - [Documentation](#documentation)
   - [Prosecco's constructor](#proseccos-constructor)
   - [Binding to primitive values: `ps-bind`](#binding-to-primitive-values-ps-bind)
@@ -19,25 +20,45 @@ That said, it's the perfect choice if you want that and _only_ that. So let's se
   - [Iterating over arrays: `ps-each`](#iterating-over-arrays-ps-each)
   - [Watching value changes: `Prosecco.watch()`](#watching-value-changes-proseccowatch)
 
-## Setup
+## Install Prosecco
 
-As of now, Prosecco JS is only available as Webpack module. Install it with
+### As webpack module
+
+Install Prosecco via npm
 
 ```bash
-npm install https://github.com/mgschoen/prosecco-js.git#v0.1.0
+$ npm install prosecco-js
 ```
 
 and import it in your JavaScript:
 
 ```js
 // index.js
+
 import Prosecco from 'prosecco-js';
 ```
 
-Somwhere in your HTML, define a root for your Prosecco app.
+### Via CDN
+
+For development purposes, include the following script in the `<head>` of your HTML:
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/mgschoen/prosecco-js@latest/dist/prosecco.js">
+```
+
+For production releases, use the minified version:
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/mgschoen/prosecco-js@latest/dist/prosecco.min.js">
+```
+
+## Quickstart
+
+Somewhere in your HTML, define a root for your Prosecco app.
 
 ```html
 <!-- index.html -->
+
 <!DOCTYPE html>
 <html>
 <head>...</head>
@@ -51,11 +72,10 @@ Somwhere in your HTML, define a root for your Prosecco app.
 </html>
 ```
 
-Lastly, initalise your app in your JavaScript.
+Then, initalise your app in your JavaScript.
 
 ```js
 // index.js
-import Prosecco from 'prosecco-js';
 
 var appRoot = document.getElementById('app-root');
 var app = new Prosecco(appRoot, {
@@ -63,7 +83,7 @@ var app = new Prosecco(appRoot, {
 });
 ```
 
-And your app is ready!
+That's it! Your app is ready.
 
 The object with the `text` property is your app's data model. You can bind DOM elements to the properties in there.
 
