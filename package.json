@@ -1,14 +1,14 @@
 {
   "name": "prosecco-js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "src/index.js",
   "description": "Super light and fizzy data binding",
   "keywords": [
-    "javascript", 
-    "data-binding", 
-    "framework", 
-    "dom", 
-    "dom-manipulation", 
+    "javascript",
+    "data-binding",
+    "framework",
+    "dom",
+    "dom-manipulation",
     "prosecco"
   ],
   "author": "Martin Schoen <martingeorg.schoen@gmail.com>",
