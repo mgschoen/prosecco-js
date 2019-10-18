@@ -267,7 +267,7 @@ You can not only repeat individual elements, but also subtrees of the document:
 The `ps-each-value-target` attribute defines
 
 * which child element gets bound to the array values
-* and which attribute of that child the value is bound to
+* and which attribute of that child the value is bound to.
 
 So the example above would render as
 
@@ -363,4 +363,6 @@ var app = new Prosecco(appRoot, {
 app.watch('list', function (oldValue, newValue) {
     alert('list changed from "' + oldValue + '" to "' + newValue + '")';
 });
+
+app.model.list = [ 4, 5, 6 ]
 ```
