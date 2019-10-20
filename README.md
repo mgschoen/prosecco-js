@@ -33,8 +33,6 @@ $ npm install prosecco-js
 and import it in your JavaScript:
 
 ```js
-// index.js
-
 import Prosecco from 'prosecco-js';
 ```
 
