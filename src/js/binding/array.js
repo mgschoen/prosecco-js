@@ -7,9 +7,10 @@ export default function ArrayBinding (model, property) {
     this.originalObject = model[property]
     this.proxyObject
     this.watchers = []
+    this.atomicOperationOngoing = false
 
-    /* Functions */
-    // Getter and setter for the object's individual propertiers
+    /* Public methods */
+    // Getter and setter for the object's individual properties
     this.individualGetter = function (target, property) {
         return target[property]
     }
@@ -19,8 +20,10 @@ export default function ArrayBinding (model, property) {
         Object.assign(oldObject, target)
         target[property] = value
         // Execute watchers
-        for (var j = 0; j < _this.watchers.length; j++) {
-            _this.watchers[j](oldObject, target)
+        if (!_this.atomicOperationOngoing) {
+            for (var j = 0; j < _this.watchers.length; j++) {
+                _this.watchers[j](oldObject, target)
+            }
         }
         return true
     }
@@ -32,10 +35,18 @@ export default function ArrayBinding (model, property) {
         if (!Array.isArray(newArray)) {
             throw new Error('Cannot assign non-Array value to Array property')
         }
+        var target = _this.proxyObject
+        var oldObject = []
+        Object.assign(oldObject, target)
+        _this.atomicOperationOngoing = true
         // Prevent the proxy getting replaced by an assignment.
         // Substitute all its values instead
-        _this.proxyObject.length = 0
-        _this.proxyObject.push.apply(_this.proxyObject, newArray)
+        target.length = 0
+        target.push.apply(target, newArray)
+        _this.atomicOperationOngoing = false
+        for (var j = 0; j < _this.watchers.length; j++) {
+            _this.watchers[j](oldObject, target)
+        }
         return true
     }
     this.bind = function (element, attribute, event) {
