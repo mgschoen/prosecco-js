@@ -1,6 +1,6 @@
 {
   "name": "prosecco-js",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "src/index.js",
   "description": "Super light and fizzy data binding",
   "keywords": [
