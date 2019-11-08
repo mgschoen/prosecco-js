@@ -10,9 +10,9 @@ export default function (declaration) {
         var binding = bindings[i].trim()
         var bindingComponents = binding.split(':')
         var parsedBinding = { variable: null, attribute: null, event: null }
-        for (var i = 0; i < bindingComponents.length; i++) {
-            var component = bindingComponents[i].trim()
-            switch (i) {
+        for (var j = 0; j < bindingComponents.length; j++) {
+            var component = bindingComponents[j].trim()
+            switch (j) {
                 case 0:
                     parsedBinding.variable = component || null
                     break
