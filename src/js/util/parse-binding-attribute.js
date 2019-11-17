@@ -9,7 +9,11 @@ export default function (declaration) {
     for (var i = 0; i < bindings.length; i++) {
         var binding = bindings[i].trim()
         var bindingComponents = binding.split(':')
-        var parsedBinding = { variable: null, attribute: null, event: null }
+        var parsedBinding = { 
+            variable: null,
+            attribute: 'textContent',
+            event: null
+        }
         for (var j = 0; j < bindingComponents.length; j++) {
             var component = bindingComponents[j].trim()
             switch (j) {
@@ -20,12 +24,15 @@ export default function (declaration) {
                     parsedBinding.attribute = component || 'textContent'
                     break
                 case 2:
-                default:
                     parsedBinding.event = component || null
+                    break
+                default:
             }
         }
-        parsedBindings.push(parsedBinding)
+        if (parsedBinding.variable) {
+            parsedBindings.push(parsedBinding)
+        }
     }
 
-    return parsedBindings
+    return parsedBindings.length ? parsedBindings : null
 }
