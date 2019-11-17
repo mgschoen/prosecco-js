@@ -41,13 +41,13 @@ import Prosecco from 'prosecco-js';
 For development purposes, include the following script in the `<head>` of your HTML:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/prosecco-js@v0.1.6/dist/prosecco.js">
+<script src="https://cdn.jsdelivr.net/npm/prosecco-js@v0.2.1/dist/prosecco.js">
 ```
 
 For production releases, use the minified version:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/prosecco-js@v0.1.6/dist/prosecco.min.js">
+<script src="https://cdn.jsdelivr.net/npm/prosecco-js@v0.2.1/dist/prosecco.min.js">
 ```
 
 ## Quickstart
