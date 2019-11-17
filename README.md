@@ -91,15 +91,13 @@ Let's bind some elements to our `text` property:
 <!-- index.html -->
 ...
 <div id="#app-root">
-    <input ps-bind="text" 
-        ps-bind-attribute="value" 
-        ps-bind-event="input">
+    <input ps-bind="text:value:input">
     <p ps-bind="text"></p>
 </div>
 ...
 ```
 
-I'll cover the details of all those `ps-` attributes later. For the moment, let's just see what happens here:
+I'll cover the details of that `ps-bind` attribute later. For the moment, let's just see what happens here:
 
 ![](http://argonn.me/share/prosecco-demo-1.gif)
 
@@ -187,10 +185,10 @@ The paragraph that is bound to `greeting` will then render as
 
 ![](http://argonn.me/share/prosecco-demo-2.png)
 
-If you want to bind to a specific attribute instead of the content of an element, use `ps-bind-attribute`.
+If you want to bind to an attribute instead of the content of an element, specify the desired attribute behind a colon in your `ps-bind`.
 
 ```html
-<input type="text" ps-bind="greeting" ps-bind-attribute="value">
+<input type="text" ps-bind="greeting:value">
 ```
 
 In this input field, the value of the variable `greeting` will be bound to the input's `value` attribute. So, with our model from above, this would render as:
@@ -201,9 +199,15 @@ In this input field, the value of the variable `greeting` will be bound to the i
 
 ![](http://argonn.me/share/prosecco-demo-3.png)
 
-If you don't specify a `ps-bind-attribute`, Prosecco will default to binding to the element's `textContent`.
+If you don't specify an attribute, Prosecco will default to binding to the element's `textContent`.
 
-You can bind as many elements as you like to a single variable. But you can only bind one variable to an element.
+If you want to bind multiple variables to an element, just add a comma and another binding declaration to your `ps-bind`:
+
+```html
+<button ps-bind="buttonLabel,loading:disabled"></button>
+```
+
+This button's label will be set to the variable `buttonLabel`'s value. It will be disabled whenever the `loading` variable is [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy).
 
 #### Modifying bound variables
 
@@ -215,18 +219,17 @@ app.model.greeting = 'À votre santé, world!';
 
 Executing the line above will update both your model and all elements that are bound to it.
 
-It also works the other way round: If you want the changes you make in the DOM to be reflected in your model, specify a `ps-bind-event`. Each time the specified event occurs on the bound element, Prosecco will update its corresponding value in the model.
+It also works the other way round: If you want the changes you make in the DOM to be reflected in your model, specify an event name behind a second colon in your `ps-bind`.
 
 ```html
-<input type="text"
-    ps-bind="greeting"
-    ps-bind-attribute="value"
-    ps-bind-event="input">
+<input type="text" ps-bind="greeting:value:input">
 ```
 
-In this input field, whenever the `input` event occurs - that is, changing the value by typing, cutting, pasting, etc. - the new value ist stored in the model. Try it by typing and looking up the value for `app.model.greeting` - it will always be the same value as you see in the input field.
+Each time the bound element emits the specified event, Prosecco will update its corresponding value in the model.
 
-Note that you can bind to any event. Should you fancy updating the model only when the user hovers the input field with her mouse, feel free to specify `ps-bind-event="mouseover"`.
+In the input field above, whenever the `input` event occurs - that is, changing the value by typing, cutting, pasting, etc. - the new value ist stored in the model. Try it by typing and looking up the value for `app.model.greeting` - it will always be the same value as you see in the input field.
+
+Note that you can bind to any event. Should you fancy updating the model only when the user hovers the input field with her mouse, feel free to specify `ps-bind="greeting:value:mouseover"`.
 
 ### Conditional rules: `ps-if`
 
@@ -370,17 +373,3 @@ app.watch('query', function (oldValue, newValue) {
 ```
 
 The function you pass to `.watch()` is called _watcher_. It always has the same signature, with the variable's previous value as its first argument and the new value as its second argument.
-
-You are free to execute arbitrary code in a watcher. Be aware, however, that watchers tend to fire more often than you think. Try for example watching an array variable, reassign a whole new array to it and see what happens...
-
-```js
-var app = new Prosecco(appRoot, {
-    list: [ 1, 2, 3 ]
-});
-
-app.watch('list', function (oldValue, newValue) {
-    alert('list changed from "' + oldValue + '" to "' + newValue + '")';
-});
-
-app.model.list = [ 4, 5, 6 ]
-```
