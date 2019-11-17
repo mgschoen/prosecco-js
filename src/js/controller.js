@@ -3,6 +3,8 @@ import Constants from './constants'
 import IfWatcher from './watchers/if-watcher'
 import EachWatcher from './watchers/each-watcher'
 
+import parseBindingAttribute from './util/parse-binding-attribute'
+
 var attr = Constants.attributeNames
 
 export default function Controller (rootElement, model) {
@@ -64,16 +66,24 @@ export default function Controller (rootElement, model) {
     // Create bindings between model and elements
     for (var i = 0; i < this.boundElements.length; i++) {
         var element = this.boundElements[i],
-            bindProperty = element.getAttribute(attr.bind),
-            bindAttribute = element.getAttribute(attr.bindAttribute) || 'textContent',
-            bindEvent = element.getAttribute(attr.bindEvent)
-        var existingBinding = this._getBindingFor(bindProperty)
-        if (existingBinding) {
-            existingBinding.bind(element, bindAttribute, bindEvent)
-        } else {
-            var binding = new Binding(this.model, bindProperty)
-            binding.bind(element, bindAttribute, bindEvent)
-            this.bindings.push(binding)
+            bindAttribute = element.getAttribute(attr.bind),
+            bindingDeclarations = parseBindingAttribute(bindAttribute)
+        if (!bindingDeclarations) {
+            continue
+        }
+        for (var j = 0; j < bindingDeclarations.length; j++) {
+            var declaration = bindingDeclarations[j],
+                variable = declaration.variable,
+                attribute = declaration.attribute,
+                event = declaration.event,
+                existingBinding = this._getBindingFor(variable)
+            if (existingBinding) {
+                existingBinding.bind(element, attribute, event)
+            } else {
+                var binding = new Binding(this.model, variable)
+                binding.bind(element, attribute, event)
+                this.bindings.push(binding)
+            }
         }
     }
 
